@@ -1,26 +1,19 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
-        cache = {}
         n = len(s)
         count = 0
 
         for start in range(n):
             count += 1
 
-            for length in range(2, n - start + 1):
-                ss = s[start:start+length]
-                if ss in cache:
-                    count += cache[ss]
-                    continue
+            offset = 1
+            while start-offset >= 0 and start+offset-1 < n and s[start-offset] == s[start+offset-1]:
+                count += 1
+                offset += 1
 
-                for offset in range(length // 2):
-                    s1 = s[start + offset]
-                    s2 = s[start + (length - 1) - offset]
-                    if s1 != s2:
-                        cache[ss] = 0
-                        break
-                else:
-                    count += 1
-                    cache[ss] = 1
+            offset = 1
+            while start-offset >= 0 and start+offset < n and s[start-offset] == s[start+offset]:
+                count += 1
+                offset += 1
 
         return count
