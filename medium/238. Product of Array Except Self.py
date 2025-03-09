@@ -1,27 +1,19 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        prefix = []
-        for i, n in enumerate(nums):
-            if i == 0:
-                prefix.append(n)
-            else:
-                prefix.append(prefix[i-1] * n)
-
-        suffix = []
-        for i, n in enumerate(nums[::-1]):
-            if i == 0:
-                suffix.append(n)
-            else:
-                suffix.append(suffix[i-1] * n)
-
-        results = []
+        # https://leetcode.com/problems/product-of-array-except-self/solutions/1342916/3-minute-read-mimicking-an-interview
         n = len(nums)
+        results = [1] * n
+
+        # carry over prefix
+        curr = 1
         for i in range(n):
-            if i == 0:
-                results.append(suffix[n-2])
-            elif i == n-1:
-                results.append(prefix[n-2])
-            else:
-                results.append(prefix[i-1] * suffix[n-2-i])
+            results[i] *= curr
+            curr *= nums[i]
+        
+        # carry over suffix
+        curr = 1
+        for i in range(n-1, -1, -1):
+            results[i] *= curr
+            curr *= nums[i]
 
         return results
