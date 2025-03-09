@@ -10,4 +10,13 @@ class Solution:
 
 
     def str_to_hash(self, s):
-        return str.join("", sorted(s))
+        # strs[i] consists of lowercase English letters
+        # so we count the characters
+        # thanks neetcode
+        count_chars = [0] * 26
+
+        for c in s:
+            count_index = ord(c) - ord("a")
+            count_chars[count_index] += 1
+
+        return tuple(count_chars)
