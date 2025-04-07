@@ -1,27 +1,23 @@
 class Solution:
     def decodeString(self, s: str) -> str:
-        result = ""
-        k = ""
-        open_bracket_count = 0
-        bracket_start = None
+        stack = []
+        curr_str = ""
+        k = 0
 
-        for i, c in enumerate(s):
+        for c in s:
             if c == "[":
-                open_bracket_count += 1
-                if bracket_start is None:
-                    bracket_start = i
+                stack.append((k, curr_str))
+                curr_str = ""
+                k = 0
 
             elif c == "]":
-                open_bracket_count -= 1
-                if open_bracket_count == 0:
-                    result += int(k) * self.decodeString(s[bracket_start + 1 : i])
-                    k = ""
-                    bracket_start = None
+                prev_k, prev_str = stack.pop()
+                curr_str = prev_str + (prev_k * curr_str)
 
-            elif bracket_start is None:
-                if c.isdigit():
-                    k += c
-                else:
-                    result += c
+            elif c.isdigit():
+                k = (k * 10) + int(c)
 
-        return result
+            else:
+                curr_str += c
+
+        return curr_str
