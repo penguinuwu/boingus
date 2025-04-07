@@ -5,28 +5,17 @@ class Solution:
         """
         n = len(nums)
         k = k % n
-        count = 0
 
-        i_start = 0
-        while count < n:
-            i_curr = i_start
-            temp = nums[i_curr]
+        # this is so crazy
+        self.reverse(nums, 0, n - 1)
+        self.reverse(nums, 0, k - 1)
+        self.reverse(nums, k, n - 1)
 
-            while True:
-                i_next = (i_curr + k) % n
-                i_curr = i_next
-                nums[i_curr], temp = temp, nums[i_curr]
-
-                count += 1
-
-                if i_curr == i_start:
-                    break
-
-            i_start += 1
-
-"""
-[1,2,3,4,5,6,7], k = 3
-[_,2,3,1,5,6,7] 4
-[1,2,3,1,5,6,4] 7
-[5,6,7,1,2,3,4]
-"""
+    def reverse(self, nums: List[int], s: int, e: int) -> None:
+        """
+        less memory than [::-1]
+        """
+        while s < e:
+            nums[s], nums[e] = nums[e], nums[s]
+            s += 1
+            e -= 1
