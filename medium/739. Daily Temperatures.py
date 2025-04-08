@@ -1,13 +1,23 @@
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        results = [0] * len(temperatures)
-        prev_temps = []
+        n = len(temperatures)
+        results = [0] * n
+        hottest = temperatures[-1]
 
-        for curr_i, curr_temp in enumerate(temperatures):
-            while prev_temps and prev_temps[-1][1] < curr_temp:
-                prev_i = prev_temps.pop()[0]
-                results[prev_i] = curr_i - prev_i
+        for curr_i in range(n-2, -1, -1):
+            if temperatures[curr_i] >= hottest:
+                hottest = temperatures[curr_i]
+                continue
 
-            prev_temps.append((curr_i, curr_temp))
+            next_i = curr_i + 1
+            while next_i < n:
+                if temperatures[curr_i] < temperatures[next_i]:
+                    results[curr_i] = next_i - curr_i
+                    break
+                elif temperatures[curr_i] < temperatures[next_i + results[next_i]]:
+                    results[curr_i] = next_i + results[next_i] - curr_i
+                    break
+                else:
+                    next_i += 1
 
         return results
