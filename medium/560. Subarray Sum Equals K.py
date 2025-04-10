@@ -1,3 +1,9 @@
+"""
+caching the sum from [0, n] but using a hashmap
+so it's constant to check if {target - sum} exists
+"""
+
+
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
         sums = defaultdict(lambda: 0)
