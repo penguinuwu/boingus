@@ -3,6 +3,7 @@
 O(mn)
 sO(mn)
 preread solution
+cleaned up
 """
 
 
@@ -13,11 +14,11 @@ class Solution:
             return []
         n = len(heights[0])
 
-        def dfs(to_visit, visited):
+
+        def dfs(to_visit):
+            visited = set()
             while to_visit:
                 curr_m, curr_n = to_visit.pop()
-                if (curr_m, curr_n) in visited:
-                    continue
 
                 visited.add((curr_m, curr_n))
 
@@ -29,22 +30,21 @@ class Solution:
                     if 0 <= new_m < m and 0 <= new_n < n and curr_height <= heights[new_m][new_n] and (new_m, new_n) not in visited:
                         to_visit.append((new_m, new_n))
 
-        # dfs for pacific ocean
-        to_visit = []
-        for i in range(m):
-            to_visit.append((i, 0))
-        for i in range(n):
-            to_visit.append((0, i))
-        to_p_o = set()
-        dfs(to_visit, to_p_o)
+            return visited
 
-        # dfs for atlantic ocean
-        to_visit = []
+
+        # dfs for pacific/atlantic ocean
+        to_visit_p_o = []
+        to_visit_a_o = []
+
         for i in range(m):
-            to_visit.append((m-i-1, n-1))
-        for i in range(n):
-            to_visit.append((m-1, n-i-1))
-        to_a_o = set()
-        dfs(to_visit, to_a_o)
+            to_visit_p_o.append((i, 0))
+            to_visit_a_o.append((m-i-1, n-1))
+        for i in range(1, n):
+            to_visit_p_o.append((0, i))
+            to_visit_a_o.append((m-1, n-i-1))
+
+        to_p_o = dfs(to_visit_p_o)
+        to_a_o = dfs(to_visit_a_o)
 
         return list(to_p_o & to_a_o)
