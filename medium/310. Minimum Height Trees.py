@@ -1,37 +1,41 @@
 """
-29:53.45
+38:37.52
 O(v+e)
 sO(v+e)
 check solution after 5mins
 leaf trimming is crazy
+edit: only enqueue leaf nodes, no need to enqueue everything
 """
 
 class Solution:
     def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        tree = defaultdict(set)
+        # centroid can only be 1 (for odd nodes) or 2 (for even nodes)
+        if n <= 2:
+            return list(range(n))
 
-        # link nodes together by edges
+        # create adjacency list
+        edge_map = defaultdict(set)
         for n1, n2 in edges:
-            tree[n1].add(n2)
-            tree[n2].add(n1)
+            edge_map[n1].add(n2)
+            edge_map[n2].add(n1)
 
-        nodes = set(range(n))
-        while len(nodes) > 2:
+        leafs = [node for node in range(n) if len(edge_map[node]) == 1]
+        nodes_remaining = n
+        while nodes_remaining > 2:
             # delete leafs until only the centroid remains
             # centroid can only be 1 (for odd nodes) or 2 (for even nodes)
-
-            # mark leafs for deletion later
-            # we cannot delete in 1 iteration because that might delete non-leafs
-            leafs = []
-            for curr_node in nodes:
-                if len(tree[curr_node]) == 1:
-                    # leaf found, mark for deletion
-                    leafs.append(curr_node)
+            nodes_remaining -= len(leafs)
+            new_leafs = []
 
             for curr_node in leafs:
                 # delete its only edge reference
-                parent_node = tree[curr_node].pop()
-                tree[parent_node].remove(curr_node)
-                nodes.remove(curr_node)
+                parent_node = edge_map[curr_node].pop()
+                edge_map[parent_node].remove(curr_node)
 
-        return list(nodes)
+                # flag whether parent node has become a leaf
+                if len(edge_map[parent_node]) == 1:
+                    new_leafs.append(parent_node)
+
+            leafs = new_leafs
+
+        return list(leafs)
