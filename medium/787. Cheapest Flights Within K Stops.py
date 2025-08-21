@@ -42,3 +42,24 @@ class Solution:
                     heapq.heappush(frontier, (curr_price + next_price, next_city, next_stops))
 
         return -1
+
+
+"""
+bellman ford
+O(K * (E + N))
+sO(N)
+
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        prices = [math.inf] * n
+        prices[src] = 0
+
+        for _ in range(k + 1):
+            temp_prices = prices.copy()
+            for start, end, price in flights:
+                if prices[start] != math.inf:
+                    temp_prices[end] = min(temp_prices[end], prices[start] + price)
+            prices = temp_prices
+
+        return -1 if prices[dst] == math.inf else prices[dst]
+"""
