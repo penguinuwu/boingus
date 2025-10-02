@@ -1,27 +1,35 @@
+"""
+22:00.83
+O(n^2)
+sO(n)
+"""
+
+
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         for i in range(9):
-            row_nums = set()
-            col_nums = set()
-            sub_box_nums = set()
+
+            row_set = set()
+            col_set = set()
+            sub_set = set()
+
             for j in range(9):
-                si = ((i // 3) * 3) + (j // 3)
-                sj = ((i % 3) * 3) + (j % 3)
-
-                if (not self.is_unique(board[i][j], row_nums) or \
-                    not self.is_unique(board[j][i], col_nums) or \
-                    not self.is_unique(board[si][sj], sub_box_nums)):
+                row = board[i][j]
+                if row in row_set:
                     return False
+                if row != ".":
+                    row_set.add(row)
 
-        return True
+                col = board[j][i]
+                if col in col_set:
+                    return False
+                if col != ".":
+                    col_set.add(col)
 
+                sub = board[i // 3 * 3 + j // 3][i % 3 * 3 + j % 3]
+                if sub in sub_set:
+                    return False
+                if sub != ".":
+                    sub_set.add(sub)
 
-    def is_unique(self, val, nums_set):
-        if val == ".":
-            return True
-
-        if val in nums_set:
-            return False
-
-        nums_set.add(val)
         return True
