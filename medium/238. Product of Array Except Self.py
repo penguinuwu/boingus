@@ -1,18 +1,28 @@
+"""
+9:47.57
+O(n)
+sO(1)
+forgot its 1passable
+"""
+
+
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        # https://leetcode.com/problems/product-of-array-except-self/solutions/1342916/3-minute-read-mimicking-an-interview
-        # https://leetcode.com/problems/product-of-array-except-self/solutions/65627/o-n-time-and-o-1-space-c-solution-with-explanation
-
         n = len(nums)
-        prefix = 1
-        suffix = 1
-        results = [1] * n
+        result = [1] * n
 
-        for i in range(n):
-            results[i] *= prefix
-            prefix *= nums[i]
+        # left-to-right (nums[0] * ... * nums[i-1])
+        # skip first
+        left_product = 1
+        for i in range(1, n):
+            left_product *= nums[i - 1]
+            result[i] *= left_product
 
-            results[n-i-1] *= suffix
-            suffix *= nums[n-i-1]
+        # right-to-left (nums[i+1] * ... * nums[-1])
+        # skip last
+        right_product = 1
+        for i in range(n - 1 - 1, -1, -1):
+            right_product *= nums[i + 1]
+            result[i] *= right_product
 
-        return results
+        return result
