@@ -1,7 +1,7 @@
 """
 3:12.36
 O(n)
-sO(n)
+sO(1) because only 26 letters
 i learned about collections.Counter yay
 """
 
