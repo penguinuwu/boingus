@@ -1,11 +1,9 @@
 """
-7:25.06
-O(n log n)
+13:56.73
+O(n)
 sO(n)
-heap sort
+bucket sort lol
 """
-
-import heapq
 
 
 class Solution:
@@ -14,8 +12,20 @@ class Solution:
         for n in nums:
             freq[n] += 1
 
-        # negate count to work with minheap
-        freq_list = [(-count, n) for n, count in freq.items()]
-        heapq.heapify(freq_list)
+        max_freq = max(freq.values())
+        # make max_freq buckets
+        buckets = [[] for _ in range(max_freq)]
 
-        return [heapq.heappop(freq_list)[1] for _ in range(k)]
+        for n, count in freq.items():
+            buckets[count - 1].append(n)
+
+        # collect k most frequent elements
+        result = []
+        for i in range(max_freq - 1, -1, -1):
+            if len(result) >= k:
+                break
+
+            if buckets[i]:
+                result.extend(buckets[i])
+
+        return result
