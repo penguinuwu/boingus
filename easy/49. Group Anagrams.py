@@ -1,5 +1,5 @@
 """
-5:50.20
+6:06.03
 O(n^2 log n)
 sO(n)
 """
@@ -9,8 +9,8 @@ from collections import defaultdict
 
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        def sort_str(str) -> str:
-            return "".join(sorted(str))
+        def sort_str(str) -> Tuple[str]:
+            return tuple(sorted(str))
 
         groups = defaultdict(list)
 
