@@ -1,8 +1,10 @@
 """
-1:31.17
-O(n^2)
-sO(1)
+3:54.59
+O(n)
+sO(n)
+1 pass
 """
+
 
 class Solution(object):
     def twoSum(self, nums, target):
@@ -11,8 +13,11 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        n = len(nums)
-        for i in range(n):
-            for j in range(i + 1, n):
-                if nums[i] + nums[j] == target:
-                    return [i, j]
+        missing_to_index = {}
+
+        for i, v in enumerate(nums):
+            if v in missing_to_index:
+                return [missing_to_index[v], i]
+
+            missing = target - v
+            missing_to_index[missing] = i
