@@ -1,30 +1,32 @@
 """
-8:15.80
-O(n log n)
+17:27.78
+O(n)
 sO(n)
+count sort instead of quicksort
 """
 
 
 class Solution:
     def findOriginalArray(self, changed: List[int]) -> List[int]:
-        s_changed = sorted(changed)
-
-        freq = defaultdict(lambda: 0)
-        for n in s_changed:
+        max_changed = max(changed)
+        freq = [0] * (max_changed + 1)
+        for n in changed:
             freq[n] += 1
 
         original = []
-        for n in s_changed:
+        n = 0
+        while n <= max_changed:
             # all occurrences of n have been accounted for
             if freq[n] == 0:
+                n += 1
                 continue
 
             freq[n] -= 1
             original.append(n)
 
-            nn = n * 2
             # check if doubled version exists
-            if freq[nn] == 0:
+            nn = n * 2
+            if nn > max_changed or freq[nn] == 0:
                 return []
             freq[nn] -= 1
 
