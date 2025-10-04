@@ -1,29 +1,19 @@
 """
-28:47.42
+48:57.68
 O(n * 2^n)
 sO(n * 2^n)
 check solution after 18mins
+really clean recursive solution
+https://leetcode.com/problems/subsets/editorial/comments/1265962/?parent=449948
 """
+
 
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        n = len(nums)
-        result = []
+        if not nums:
+            return [[]]
 
+        subsets = self.subsets(nums[:-1])
+        new = [ss + [nums[-1]] for ss in subsets]
 
-        def backtrack(start, curr_list) -> None:
-            # add itself
-            result.append(curr_list[:])
-
-            # iterate through start..n
-            for i in range(start, n):
-                curr_list.append(nums[i])
-
-                # recurse with i+1..n
-                backtrack(i+1, curr_list)
-
-                curr_list.pop()
-
-
-        backtrack(0, [])
-        return result
+        return subsets + new
