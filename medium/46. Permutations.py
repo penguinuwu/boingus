@@ -1,8 +1,9 @@
 """
-11:55.42
+20:56.88
 O(n * n!) because nPn = n!/(n-n)! = n! and copy of curr_list is O(n)
-sO(n)
+sO(n) slightly better because no set used but same order of magnitude
 check solution after 2mins
+swap solution but i prefer the previous simpler set solution
 """
 
 
@@ -11,22 +12,16 @@ class Solution:
         n = len(nums)
         result = []
 
-        def generate_permutes(curr_list, curr_set):
-            # all numbers used
-            if len(curr_list) == n:
-                result.append(curr_list.copy())
+        def generate_permutes(start_idx):
+            if start_idx == n:
+                result.append(nums.copy())
                 return
 
-            for num in nums:
-                # use a set to keep track of used numbers
-                if num not in curr_set:
-                    curr_set.add(num)
-                    curr_list.append(num)
+            for idx in range(start_idx, n):
+                nums[start_idx], nums[idx] = nums[idx], nums[start_idx]
+                # note: increase by start_idx and not just idx
+                generate_permutes(start_idx + 1)
+                nums[start_idx], nums[idx] = nums[idx], nums[start_idx]
 
-                    generate_permutes(curr_list, curr_set)
-
-                    curr_list.pop()
-                    curr_set.remove(num)
-
-        generate_permutes([], set())
+        generate_permutes(0)
         return result
