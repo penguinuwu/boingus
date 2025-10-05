@@ -1,31 +1,31 @@
 """
-29:45.43
+35:23.37
 O(n^2)
-sO(n^2)
+sO(1)
 check solution after 1min
-dp
+centre expansion
 """
 
 
 class Solution:
     def longestPalindrome(self, s: str) -> str:
+        def find_palindrome(start, end):
+            nonlocal res
+
+            while 0 <= start and end < n:
+                if s[start] != s[end]:
+                    break
+
+                if (end - start) > (res[1] - res[0]):
+                    res = (start, end)
+
+                start -= 1
+                end += 1
+
         n = len(s)
         res = (0, 0)
-
-        # memo[start][end] => s[start : end+1] is a palindrome
-        memo = [[False] * n for _ in range(n)]
-
-        # every letter itself is a palindrome
-        for idx in range(n):
-            memo[idx][idx] = True
-
-        for check_length in range(1, n):
-            for start in range(n - check_length):
-                end = start + check_length
-                if s[start] == s[end] and (
-                    check_length == 1 or memo[start + 1][end - 1]
-                ):
-                    memo[start][end] = True
-                    res = (start, end)
+        for centre in range(n):
+            find_palindrome(centre, centre)
+            find_palindrome(centre, centre + 1)
 
         return s[res[0] : res[1] + 1]
