@@ -1,25 +1,31 @@
 """
-10:30.24
-O(n^3)
-sO(1)
+29:45.43
+O(n^2)
+sO(n^2)
 check solution after 1min
-brute force
+dp
 """
 
 
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        def check(start, end):
-            while start < end:
-                if s[start] != s[end]:
-                    return False
-                start += 1
-                end -= 1
-            return True
-
+        n = len(s)
         res = (0, 0)
-        for i in range(len(s)):
-            for j in range(i, len(s)):
-                if (j - i) > (res[1] - res[0]) and check(i, j):
-                    res = (i, j)
+
+        # memo[start][end] => s[start : end+1] is a palindrome
+        memo = [[False] * n for _ in range(n)]
+
+        # every letter itself is a palindrome
+        for idx in range(n):
+            memo[idx][idx] = True
+
+        for check_length in range(1, n):
+            for start in range(n - check_length):
+                end = start + check_length
+                if s[start] == s[end] and (
+                    check_length == 1 or memo[start + 1][end - 1]
+                ):
+                    memo[start][end] = True
+                    res = (start, end)
+
         return s[res[0] : res[1] + 1]
