@@ -1,26 +1,25 @@
 """
-29:35.19
+32:00.47
 O(n)
 sO(1)
 check solution after 14mins to optimize sO(n) -> sO(1)
+dont need prev3 because prev1 has all (max(prev1+prev3, prev2))
 """
 
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        n = len(nums)
+        prev1 = 0
+        prev2 = 0
 
-        max_house0 = nums[1] if 1 < n else 0
-        max_house1 = nums[0]
-        max_house2 = 0
+        for n in nums:
+            # rob 2 houses away with current house
+            # or only rob previous house
+            curr = max(prev2 + n, prev1)
+            prev2 = prev1
+            prev1 = curr
 
-        for i in range(2, n):
-            curr_house = nums[i] + max(max_house1, max_house2)
-            max_house2 = max_house1
-            max_house1 = max_house0
-            max_house0 = curr_house
-
-        return max(max_house0, max_house1)
+        return prev1
 
 
 # [1,2,3,1]
