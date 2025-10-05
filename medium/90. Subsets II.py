@@ -1,29 +1,29 @@
 """
-10:22.21
-O(n log n * n * n^n) sorting, copying, generating all subsets with 2 recursive calls
+15:40.21
+O(n * 2^n)
 sO(n)
-dog answer because double recursion and deduplication with set
+check answer after 10mins
 """
 
 
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
         n = len(nums)
-        results = set()
+        results = []
 
         def generate_subsets(start_idx, curr_list):
-            if start_idx == n:
-                results.add(tuple(sorted(curr_list)))
-                return
+            results.append(curr_list.copy())
 
             for idx in range(start_idx, n):
-                # without start_idx
-                generate_subsets(idx + 1, curr_list)
+                # skip duplicates unless its first encounter
+                if idx != start_idx and nums[idx] == nums[idx - 1]:
+                    continue
 
-                # with start_idx
-                curr_list.append(nums[start_idx])
+                # add idx
+                curr_list.append(nums[idx])
                 generate_subsets(idx + 1, curr_list)
                 curr_list.pop()
 
         generate_subsets(0, [])
-        return list(results)
+        return results
