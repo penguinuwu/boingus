@@ -1,41 +1,41 @@
 """
-33:14.66
-O(n^3 * n!) because extra triple loop each recursion
+39:43.98
+O(n!)
 sO(n)
-check solution after 27mins and found a typo lmao
-really funny implementation
+check solution after 27mins
 """
 
 
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        def can_attack(q1, q2):
-            return (
-                q1[0] == q2[0]
-                or q1[1] == q2[1]
-                # check diagonal
-                or q1[0] + q1[1] == q2[0] + q2[1]
-                # check anti-diagonal
-                or q1[0] - q1[1] == q2[0] - q2[1]
-            )
-
-        def place_queens(curr_x, curr_list):
+        def place_queens(curr_x, atk_col, atk_diag, atk_adiag, curr_list):
             if len(curr_list) == n:
                 return placements.append(curr_list.copy())
 
-            for new_x in range(curr_x, n):
-                for new_y in range(n):
-                    new_pair = (new_x, new_y)
-                    for prev_pair in curr_list:
-                        if can_attack(new_pair, prev_pair):
-                            break
-                    else:
-                        curr_list.append(new_pair)
-                        place_queens(new_x + 1, curr_list)
-                        curr_list.pop()
+            for new_y in range(n):
+                diag = curr_x + new_y
+                adiag = curr_x - new_y
+
+                if (
+                    # dont need atk_row because we recurse (new_x + 1)
+                    new_y not in atk_col
+                    and diag not in atk_diag
+                    and adiag not in atk_adiag
+                ):
+                    atk_col.add(new_y)
+                    atk_diag.add(diag)
+                    atk_adiag.add(adiag)
+                    curr_list.append((curr_x, new_y))
+
+                    place_queens(curr_x + 1, atk_col, atk_diag, atk_adiag, curr_list)
+
+                    curr_list.pop()
+                    atk_adiag.remove(adiag)
+                    atk_diag.remove(diag)
+                    atk_col.remove(new_y)
 
         placements = []
-        place_queens(0, [])
+        place_queens(0, set(), set(), set(), [])
 
         boards = []
         for configs in placements:
