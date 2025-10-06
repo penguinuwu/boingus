@@ -1,19 +1,28 @@
+"""
+9:19.69
+O(n^2)
+sO(1)
+centre 2-pointer expansion
+"""
+
+
 class Solution:
     def countSubstrings(self, s: str) -> int:
+        def check(l, r):
+            palis = 0
+            while 0 <= l and r < n:
+                if s[l] == s[r]:
+                    palis += 1
+                    l -= 1
+                    r += 1
+                else:
+                    break
+            return palis
+
         n = len(s)
-        count = 0
+        total = 0
+        for i in range(n):
+            total += check(i, i)
+            total += check(i, i + 1)
 
-        for start in range(n):
-            count += 1
-
-            offset = 1
-            while start-offset >= 0 and start+offset-1 < n and s[start-offset] == s[start+offset-1]:
-                count += 1
-                offset += 1
-
-            offset = 1
-            while start-offset >= 0 and start+offset < n and s[start-offset] == s[start+offset]:
-                count += 1
-                offset += 1
-
-        return count
+        return total
