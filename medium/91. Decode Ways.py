@@ -1,8 +1,8 @@
 """
-18:53.59
-O(n) without memo O(2^n)
-sO(n) recursive stack
-top-down dp + "dfs" + "backtrack"
+43:57.77
+O(n)
+sO(1)
+house robber dp
 """
 
 
@@ -12,26 +12,33 @@ class Solution:
         zero_to_six = set(map(str, range(7)))
         n = len(s)
 
-        @cache
-        def dfs_backtrack(start_idx):
-            # reached the end
-            if start_idx == n:
-                return 1
+        # no way house robber decoder
 
-            # first char must be [1-9]
-            if s[start_idx] == "0":
-                return 0
-            total = dfs_backtrack(start_idx + 1)
+        # ways to decode s[0]
+        # first char must be [1-9]
+        prev1 = 0 if s[0] == "0" else 1
+
+        # ways to decode s[0 : 1]
+        prev2 = 1
+
+        for i in range(1, len(s)):
+            curr = 0
+
+            # first char must be [1-9] again
+            if s[i] != "0":
+                curr += prev1
 
             # if first char is 1, second char can be [0-9]
             # if first char is 2, second char can be [0-6]
-            next_idx = start_idx + 1
-            if next_idx < n:
-                if (s[start_idx] == "1" and s[next_idx] in zero_to_nine) or (
-                    s[start_idx] == "2" and s[next_idx] in zero_to_six
-                ):
-                    total += dfs_backtrack(next_idx + 1)
+            prev_i = i - 1
+            if (s[prev_i] == "1" and s[i] in zero_to_nine) or (
+                s[prev_i] == "2" and s[i] in zero_to_six
+            ):
+                curr += prev2
 
-            return total
+            # move to next house lol
+            prev2 = prev1
+            prev1 = curr
 
-        return dfs_backtrack(0)
+        # house robber
+        return prev1
