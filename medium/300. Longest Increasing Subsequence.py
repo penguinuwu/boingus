@@ -1,25 +1,28 @@
 """
-6:47.97
+16:09.88
 O(n^2)
 sO(n)
 preread solution
-the max is not always at the end
-be careful of len(nums)=0 and len(nums)=1 case
+be careful with duplicates (sequence[prev] **==** nums[curr])
 """
 
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        # store the longest sequence ending at each index
-        dp = [1] * n
-        answer = 1
+        sequence = [nums[0]]
 
-        for curr in range(1, n):
-            # find the longest sequence ending at curr
-            for prev in range(curr):
-                if nums[prev] < nums[curr]:
-                    dp[curr] = max(dp[curr], dp[prev] + 1)
-            answer = max(answer, dp[curr])
+        for curr in range(1, len(nums)):
+            if nums[curr] > sequence[-1]:
+                sequence.append(nums[curr])
+            else:
+                for prev in range(len(sequence)):
+                    # check == because we cannot have duplicates in the sequence
+                    if sequence[prev] >= nums[curr]:
+                        # note: this sequence will NOT always be valid
+                        # but the length will always be the MAX VALID length
+                        # because we only append when n > seq[-1]
+                        # my explanation sucks but think about it and itll make sense
+                        sequence[prev] = nums[curr]
+                        break
 
-        return answer
+        return len(sequence)
