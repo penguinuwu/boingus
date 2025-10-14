@@ -1,27 +1,19 @@
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        ops = set(("+", "-", "*", "/"))
         stack = []
 
-        for curr in tokens:
-            if curr in ops:
-                self.evaluate(stack, curr)
+        for c in tokens:
+            if c == "+":
+                stack.append(stack.pop() + stack.pop())
+            elif c == "*":
+                stack.append(stack.pop() * stack.pop())
+            elif c == "-":
+                temp = stack.pop()
+                stack.append(stack.pop() - temp)
+            elif c == "/":
+                temp = stack.pop()
+                stack.append(math.trunc(stack.pop() / temp))
             else:
-                stack.append(int(curr))
+                stack.append(int(c))
 
-        return stack[0]
-    
-    def evaluate(self, stack: List[int], operation: str):
-        n2 = stack.pop()
-        n1 = stack.pop()
-
-        if operation == "+":
-            stack.append(n1 + n2)
-        elif operation == "-":
-            stack.append(n1 - n2)
-        elif operation == "*":
-            stack.append(n1 * n2)
-        elif operation == "/":
-            stack.append(int(n1 / n2))
-        else:
-            raise RuntimeError()
+        return stack[-1]
