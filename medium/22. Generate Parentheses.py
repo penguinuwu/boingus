@@ -12,15 +12,19 @@ class Solution:
 
         def dfs(curr_list, open_b, close_b):
             if open_b == 0 and close_b == 0:
-                result.append(curr_list)
+                result.append(str.join("", curr_list))
 
             # open
             if open_b > 0:
-                dfs(curr_list + ["("], open_b - 1, close_b)
+                curr_list.append("(")
+                dfs(curr_list, open_b - 1, close_b)
+                curr_list.pop()
 
             # close
             if close_b > 0 and close_b > open_b:
-                dfs(curr_list + [")"], open_b, close_b - 1)
+                curr_list.append(")")
+                dfs(curr_list, open_b, close_b - 1)
+                curr_list.pop()
 
         dfs([], n, n)
-        return [str.join("", l) for l in result]
+        return result
