@@ -1,7 +1,7 @@
 """
 O(n)
 sO(1)
-merge here is bad, can be simplified breaking down cases
+merge is done by saving 2 temps
 """
 
 
@@ -27,22 +27,21 @@ class Solution:
         # reverse 2nd half
         prev = None
         curr = midpoint
-        temp = curr
         while curr:
-            temp = curr.next
+            nxt = curr.next
             curr.next = prev
             prev = curr
-            curr = temp
+            curr = nxt
 
         # merge
         normal = head
         reverse = prev
-        while normal and reverse:
-            normal_temp = normal.next
-            normal.next = reverse
-            reverse = reverse.next
-            normal = normal.next
+        while reverse:
+            normal_next = normal.next
+            reverse_next = reverse.next
 
-            if normal:
-                normal.next = normal_temp
-                normal = normal.next
+            normal.next = reverse
+            reverse.next = normal_next
+
+            normal = normal_next
+            reverse = reverse_next

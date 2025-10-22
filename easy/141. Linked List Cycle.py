@@ -1,7 +1,7 @@
 """
 O(n)
-sO(n)
-space can be optimized using floyd's cycle detection algorithm
+sO(1)
+floyd's cycle detection algorithm
 """
 
 
@@ -12,10 +12,13 @@ space can be optimized using floyd's cycle detection algorithm
 #         self.next = None
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        seen = set()
-        while head:
-            if head in seen:
+        fast = head
+        slow = head
+
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
                 return True
-            seen.add(head)
-            head = head.next
+
         return False
