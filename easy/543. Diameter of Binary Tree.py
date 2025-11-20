@@ -1,6 +1,8 @@
 """
 O(n)
 sO(n)
+check solution
+use global result instead of return
 """
 
 
@@ -13,14 +15,17 @@ sO(n)
 class Solution:
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         def helper(node):
+            nonlocal diameter
+
             if node is None:
-                return 0, 0
+                return 0
 
-            left_max_d, left_max = helper(node.left)
-            right_max_d, right_max = helper(node.right)
-            return (
-                max(left_max_d, right_max_d) + 1,
-                max(left_max_d + right_max_d, left_max, right_max),
-            )
+            left_depth = helper(node.left)
+            right_depth = helper(node.right)
 
-        return helper(root)[1]
+            diameter = max(left_depth + right_depth, diameter)
+            return max(left_depth, right_depth) + 1
+
+        diameter = 0
+        helper(root)
+        return diameter
